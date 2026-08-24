@@ -15,7 +15,8 @@ TRyC/
 │   ├── clase2/
 │   └── clase3/
 ├── guia-de-ejercicios/
-└── tarea1/
+└── Tareas/
+    └── tarea1/
 ```
 
 
