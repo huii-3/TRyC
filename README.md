@@ -16,7 +16,6 @@ TRyC/
 │   └── clase3/
 ├── guia-de-ejercicios/
 └── Tareas/
-    └── tarea1/
 ```
 
 
