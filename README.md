@@ -10,26 +10,12 @@ Este repositorio reúne los ejercicios, prácticas y tareas de la materia de Teo
 
 ```
 TRyC/
-├── README.md
 ├── clases/
 │   ├── clase1/
-│   │   ├── 1er_ejemplo.m
-│   │   └── 2do_ejemplo.m
 │   ├── clase2/
-│   │   ├── ej1.m
-│   │   ├── ej2.m
-│   │   └── u1ej5-dudoso.m
 │   └── clase3/
-│       └── sist_mecanico.m
 ├── guia-de-ejercicios/
-│   ├── ej1_redes.m
-│   ├── u1ej5_a.m
-│   ├── u1ej5_b.m
-│   └── u1ej5c.m
 └── tarea1/
-    ├── ej1tarea.m
-    ├── ej2tarea.m
-    └── ej3tarea.m
 ```
 
 ## Contenido por carpeta
