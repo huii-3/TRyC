@@ -18,8 +18,4 @@ TRyC/
 └── tarea1/
 ```
 
-## Contenido por carpeta
 
-- **clases/**: ejemplos desarrollados en clase, organizados por número de clase.
-- **guia-de-ejercicios/**: resolución de la guía de ejercicios de redes y sistemas de control.
-- **tarea1/**: ejercicios de la primera tarea (funciones de transferencia, principio de superposición y análisis por mallas/nodos).
