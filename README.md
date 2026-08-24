@@ -4,8 +4,6 @@
 
 ## Índice
 
-- [Objetivo](#objetivo)
-- [Estructura del repositorio](#estructura-del-repositorio)
 - [Clases](clases/)
 - [Guía de ejercicios](guia-de-ejercicios/)
 - [Tareas](Tareas/)
