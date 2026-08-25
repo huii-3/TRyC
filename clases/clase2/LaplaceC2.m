@@ -1,5 +1,5 @@
 %Limpio el entorno
-cear all, close all, clc
+clear all, close all, clc
 
 pkg load control
 pkg load symbolic

@@ -19,7 +19,8 @@ TRyC/
 ├── clases/
 │   ├── clase1/
 │   ├── clase2/
-│   └── clase3/
+│   ├── clase3/
+│   └── clase4/
 ├── guia-de-ejercicios/
 └── Tareas/
 ```
