@@ -9,7 +9,9 @@
 
  eq = 5*s^2*Y + 2*s*Y + 3*Y - 5*s*X - X == 0
 
+ % despejo Y en funcion de X
  Sol = solve(eq, Y)
+ %Divido por X y obtengo la fdt
  G_sym = simplify(Sol/X)
 
  %separamos numerador y denominador
@@ -24,6 +26,6 @@
  G = tf(num,den)
  p=pole(G)
  %aplicamos el TVF a la rspuesta al escalon
-step(G)
+ step(G)
  dcgain(G)
 

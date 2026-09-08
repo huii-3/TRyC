@@ -1,110 +1,49 @@
-clear all, close all, clc
+close all, clear all, clc
 
-pkg load symbolic
+pkg load symbolic;
+pkg load control;
 
-syms R1 R2 R3 R4 L1 L2 C1 V1 V2 V3 real
-syms I1 I2 I3 s
+syms R1 R2 R3 R4 L1 L2 C1 E1 E2 s real;
+syms I1 I2 I3 amp_esc amp_sen w real;
 
-%MALLAS
-%para tener la matriz de la forma A*I=B
+%cargamos las ecuaciones
 
-A = [(1/(s*C1) + R3 + R1) (-R3) (-R1);
-     (-R3) (R3+s*L2+R2) (-R2);
-     (-R1) (-R2) (R4 + s*L1 + R1 + R2)]
+eq1 = 0 == I1*(1/(s*C1) + R3 + R1) + I2*(-R3)+ I3*(-R1) %malla 1
+eq2 = -E2 == I1*(-R3) + I2*(R2+R3+s*L2) + I3*(-R2) %malla 2
+eq3 = E1 == I1*(-R1) + I2*(-R2) + I3*(R4 + s*L1 + R1 + R2) %malla 3
 
-B = [0;
-    -V2;
-    V1]
+sol = solve(eq1, eq2, eq3, I1, I2, I3) %creamos una estructura de datos de elementos simbolicos
+%ahora tenemos las soluciones en simbolico
 
-I = [I1;
-     I2;
-     I3]
+%invocamos cada elemento de la estructura de datos
+sol_I1 = simplify(sol.I1)
+sol_I2 = simplify(sol.I2)
+sol_I3 = simplify(sol.I3)
 
-%resolvemos simbolicamente
+%simulamos
 
-I_sol = A\B
+%suponemos que E1 es un escalon de amplitud 12 y E2 es una sinusoide
 
+%transformadas de E1 y E2
+E1 = amp_esc / s
+E2 = (amp_sen*w)/(s^2+w^2)
 
-%NODOS
+%le damos valores a los elementos
+R1_v=100;
+R2_v=20;
+R3_v=40;
+R4_v=60;
+C1_v=10e-6;
+L1_v=20e-3;
+L2_v=50e-3;
+amp_esc_v=12;
+amp_sen_v=5;
 
-%admitancias equivalentes luego de trans. fuentes
+%tomamos cada expresion de las soluciones y sustituimos
 
-Y1 = 1/(R4+s*L1)
-Y2 = 1/(s*L2)
-
-%matriz de nodos
-
-mat_A = [(1/R1 + s*C1 + 1/(R4+s*L1)) (-s*C1) (-1/(R4+s*L1));
-         (-s*C1) (1/R3+s*C1+1/s*L2) (-1/s*L2);
-         (-1/(R4+s*L1)) (-1/(s*L2)) (1/(R4+s*L1+1/R2+1/(s*L2)))]
-
-mat_B = [(V1*Y1);
-         (V2*Y2);
-         (-V1*Y1-V2*Y2)]
-
-mat_V = [V1;
-         V2;
-         V3]
-
-%resolvemos nodos simbolicamente
-
-V_sol = mat_A\mat_B
-
-
-%SIMULACION
-
-% 1. Valores de componentes
-v_R1 = 10;
-v_R2 = 20;
-v_R3 = 15;
-v_R4 = 5;
-v_C1 = 100e-6;
-v_L1 = 10e-3;
-v_L2 = 20e-3;
-
-% 2. Valores de fuentes
-v_V1 = 12;
-v_V2 = 24;
-
-% 3. Frecuencia de trabajo (50 Hz)
-f = 50;
-w = 2 * pi * f;
-v_s = 1i * w; % s = j*w para régimen permanente senoidal
-
-%sustituimos los valores numericos
-
-I_num = subs(I_sol, {R1,R2,R3,R4,C1,L1,L2,V1,V2,s}, {v_R1,v_R2,v_R3,v_R4,v_C1,v_L1,v_L2,v_V1,v_V2, v_s})
-
-V_num = subs(V_sol, {R1,R2,R3,R4,C1,L1,L2,V1,V2,s}, {v_R1,v_R2,v_R3,v_R4,v_C1,v_L1,v_L2,v_V1,v_V2, v_s})
-
-I_num = double(I_num)
-
-V_num = double(V_num)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+I1_num = simplify(subs(sol_I1, {R1, R2, R3, R4, L1, L2, C1, amp_esc, amp_sen}, {R1_v, R2_v, R3_v, R4_v, L1_v, L2_v, C1_v, amp_esc_v, amp_sen_v}))
+I2_num = simplify(subs(sol_I2, {R1, R2, R3, R4, L1, L2, C1, amp_esc, amp_sen}, {R1_v, R2_v, R3_v, R4_v, L1_v, L2_v, C1_v, amp_esc_v, amp_sen_v}))
+I3_num = simplify(subs(sol_I3, {R1, R2, R3, R4, L1, L2, C1, amp_esc, amp_sen}, {R1_v, R2_v, R3_v, R4_v, L1_v, L2_v, C1_v, amp_esc_v, amp_sen_v}))
 
 
 
