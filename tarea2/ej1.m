@@ -8,7 +8,8 @@ syms I Vab Vin real
 eq1 = 12*I == Vin+2*I
 eq2 = 6*I == Vab
 
-S = solve(eq1, eq2, Vab, I);
+S = solve(eq1, eq2, Vab, I); %toma eq1 y e2, hace un sist de ecuaciones y despeja Vab e I
+                             % en este caso en funcion de Vin
 
 fdt = simplify(S.Vab/Vin)
 
