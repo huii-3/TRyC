@@ -12,7 +12,9 @@ eq1 = 0 == I1*(1/(s*C1) + R3 + R1) + I2*(-R3)+ I3*(-R1) %malla 1
 eq2 = -E2 == I1*(-R3) + I2*(R2+R3+s*L2) + I3*(-R2) %malla 2
 eq3 = E1 == I1*(-R1) + I2*(-R2) + I3*(R4 + s*L1 + R1 + R2) %malla 3
 
-sol = solve(eq1, eq2, eq3, I1, I2, I3) %creamos una estructura de datos de elementos simbolicos
+%resolvemos el sistema
+sol = solve(eq1, eq2, eq3, I1, I2, I3)
+%creamos una estructura de datos de elementos simbolicos
 %ahora tenemos las soluciones en simbolico
 
 %invocamos cada elemento de la estructura de datos
