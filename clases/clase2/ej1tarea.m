@@ -1,3 +1,4 @@
+%tarea 1, ejercicio 3
 clear all, close all, clc
 
 pkg load symbolic

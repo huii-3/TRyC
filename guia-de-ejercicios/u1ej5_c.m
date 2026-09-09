@@ -22,7 +22,7 @@ Vout_Vx = (Z4)/(Z2+Z4)
 
 %relacion entre Vout y Vin
 
-V_rel = (Vx_Vin*Vout_Vx)
+V_rel = simplify(Vx_Vin*Vout_Vx)
 
 %simulacion
 
@@ -46,13 +46,13 @@ V_rel_sust = collect(simplify(subs(V_rel, {R1,R2,C1,L1}, {R1_v,R2_v,C1_v,L1_v}))
 num_V=sym2poly(num_V_rel_sust)
 den_V=sym2poly(den_V_rel_sust)
 
-%hago la fdt
+%hago la fdt, minreal cancela polos y ceros en comun
 
-F_V_rel = minreal(tf(num_V, den_V))
+G = minreal(tf(num_V, den_V))
 
 %respuesta al escalon
 figure()
-step(F_V_rel)
+step(G)
 
 
 
