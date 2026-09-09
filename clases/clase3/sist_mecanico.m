@@ -55,9 +55,11 @@ G1_F = minreal(tf(num_G1,den_G1))
 G2_F = minreal(tf(num_G2,den_G2))
 %minreal cancela polos en comun
 
-%Respuesta al escalon. En este caso sí podemos usar "step", pero tenemos que multiplicar por la amplitud del mismo
+% Respuesta al escalon. En este caso sí podemos usar "step",
+% pero tenemos que multiplicar por la amplitud del mismo
 figure()	%nueva figura
-subplot(1,2,1);	%armamos una "grilla" de figuras, 1 fila, 2 columnas, y seleccionamos la figura izquierda
+subplot(1,2,1);	% armamos una "grilla" de figuras, 1 fila, 2 columnas,
+                % y seleccionamos la figura izquierda
 
 %grid: agrega una cuadricula ; gridminor: agrega lineas secundarias
 step(F_esc_v * G1_F), grid, grid minor
