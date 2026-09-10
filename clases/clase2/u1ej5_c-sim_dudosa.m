@@ -1,60 +1,65 @@
-%UNIDAD 1 EJERCICIO 5C
-
-clear all, close all, clc
+% UNIDAD 1 EJERCICIO 5C
+clear variables, close all, clc
 
 pkg load symbolic
 pkg load control
 
-%resolucion por mallas
-syms R1 R2 C1 L1 Vin s real
+% --- Simbolico ---
+% OJO: s es compleja, no va con 'real' / 'positive'
+syms R1 R2 C1 L1 Vin positive
+syms s
 
-%impedancias
-Z1 = R1
-Z2 = R2
-Z3 = 1/(s*C1)
-Z4 = s*L1
+% Impedancias
+Z1 = R1;
+Z2 = R2;
+Z3 = 1/(s*C1);
+Z4 = s*L1;
 
-%Z equivalente entre nodo X y GND
-Z234 = ((R2+ s*L1)*(1/(s*C1))) / (R2+ s*L1 +(1/(s*C1)))
+% Z equivalente entre nodo X y GND:
+% rama C1 en paralelo con rama (R2+L1)
+Z234 = ((Z2 + Z4)*Z3) / (Z2 + Z4 + Z3);
 
+Vx = Vin * Z234/(Z1+Z234);
+Vout = Vx * Z4/(Z2+Z4); % Vout sobre L1
 
-Vx = Vin * Z234/(Z1+Z234)
-Vout = Vx * Z4/(Z4+Z2) %Vout en funcion de Vin
+fdt = simplify(Vout/Vin);
+disp("FDT simbolica:")
+pretty(fdt)
 
-fdt = simplify(Vout/Vin)
+% --- Sustitucion numerica ---
+vR1 = 10e3;
+vR2 = 5e3;
+vL1 = 10e-3;
+vC1 = 25e-6;
 
-%sin usar solve
+fdt_num = subs(fdt, {R1,R2,C1,L1}, {vR1,vR2,vC1,vL1});
+fdt_num = collect(expand(fdt_num), s);
 
-%simluacion, paso al paquete de control
+[num_sym, den_sym] = numden(fdt_num);
 
-%valores de elementos
-vR1=10e3;
-vR2=5e3;
-vL1=10e-3;
-vC1=25e-6;
+num = sym2poly(num_sym);
+den = sym2poly(den_sym);
 
-%sustituyo variables simbolicas por valores numericos
-fdt_num= subs(fdt, {R1,R2,C1,L1}, {vR1,vR2,vC1,vL1})
-%con collect ordeno las potencias de s
-fdt_num= simplify(collect(fdt_num,s))
+G = tf(num, den);
+G = minreal(G);
 
-%separo num y den
-[num,den]=numden(fdt_num)
+disp("G = "), G
+disp("dcgain = "), dcgain(G)
+disp("polos = "), pole(G)
+disp("ceros = "), zero(G)
 
-%transformo num y den a vectores de coeficientes
-num=sym2poly(num)
-den=sym2poly(den)
+% --- Respuestas ---
+figure(1);
+step(12*G);
+grid on;
+title("Respuesta al escalon 12V - Vout sobre L1");
+xlabel("t [s]"); ylabel("Vout [V]");
 
-%hago la FdT
-G = tf(num,den)
+figure(2);
+pzmap(G);
+grid on;
+title("Polos y ceros");
 
-%veo la respuesta al escalon con amplitud 12
-step(12*G)
-%valor final:
-dcgain(G)
-p = pole(G)
-z = zero(G)
-
-
-%La respuesta al impulso es rara, capaz los valores de los componentes son el problema
-
+figure(3);
+bode(G);
+grid on;
