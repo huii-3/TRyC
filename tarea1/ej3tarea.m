@@ -30,6 +30,7 @@ sol_I3 = simplify(sol.I3)
 E1 = amp_esc / s
 E2 = (amp_sen*w)/(s^2+w^2)
 
+
 %le damos valores a los elementos
 R1_v=100;
 R2_v=20;
