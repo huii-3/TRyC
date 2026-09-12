@@ -1,3 +1,6 @@
+%  A partir de la Respuesta Temporal al escalón con ganancia 5,
+%  determinar la Función de Transferencia aproximada del sistema
+
 close all, clear all, clc
 
 pkg load control
@@ -5,18 +8,19 @@ pkg load control
 %definimos s
 s= tf('s')
 
-%vemos del grafico que:
-%el sist es de primer orden
-%hay un retardo de 100s
-%ante el escalon de amplitud 5, termina en 95
-%el tiempo de establecimiento es de 500s
+% Vemos del grafico que:
+%  - El sist es de primer orden
+%  - Hay un retardo de 100ms
+%  - Ante el escalon de amplitud 5, termina en 95
+%  - El tiempo de establecimiento es de 500ms
 
-ts = 400 %sin el retardo
+
+tr = 100; % retardo
+ts = 500 - tr % sin el retardo
 K = 95/5 %(valor final)/(amplitud del escalon)
 tau = ts/4
-Td = 100 %retardo
 
-%definimos la fdt
+% Definimos la fdt
 
 G1 = K/(tau*s+1)
 step(5*G1,ts) %hasta 400
