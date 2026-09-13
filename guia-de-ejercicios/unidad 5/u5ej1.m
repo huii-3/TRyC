@@ -176,7 +176,7 @@ G = minreal(-Z2/Z1)
 
 
 %----------------------------------------------------------------------
-% CIRCUITO 6 (dejalo ahi nomas)
+% CIRCUITO 7 (dejalo ahi nomas)
 
 
 
