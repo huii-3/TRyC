@@ -214,6 +214,74 @@ step(G1_fdt); hold on;
 step(G2)
 
 
+%----------------------------------------------------------------------------
+
+% 4) Identificar los sitemas:
+
+% SISTEMA 1
+
+
+close all, clear all, clc;
+
+pkg load control;
+s= tf('s');
+
+% veo que es un sistema subamortiguado:
+
+Vmax = 0.89;
+Vfinal = 0.6;
+
+K = 0.6;
+Tp = 3.2
+Mp = (Vmax-Vfinal)/(Vfinal)
+
+psita = (-log(Mp))/(sqrt(log(Mp)^2+pi^2))
+wn = pi/(Tp*sqrt(1-psita^2))
+
+
+G = (K*wn^2)/(s^2+2*psita*wn*s+wn^2)
+
+step(G,30)
+
+% SISTEMA 2
+
+close all, clear all, clc;
+
+pkg load control;
+s = tf('s');
+% Veo que es un sistema sobreamortiguado
+
+% Lo aproximo como un sistema de primer orden, con 2 polos iguales
+
+K = 5
+ts = 8
+tau = ts/4
+
+
+G = (K)/(((tau/2)*s + 1)^2)
+
+step(G,10)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
