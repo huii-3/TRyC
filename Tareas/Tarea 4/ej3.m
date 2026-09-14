@@ -20,7 +20,7 @@ K3 = 1;
 % Sistema de primer orden de rama superior
 % U1:A
 Zeq = (R * 1/(s*C))/(R + 1/(s*C));
-G1 = minreal((-1)* Zp/R) % Integrador inverso:
+G1 = minreal((-1)* Zeq/R) % Integrador inverso:
                          %    G = -Zf/Zin
 
 % Inversor rama inferior: K2 = 1 ; no pongo el signo aun
