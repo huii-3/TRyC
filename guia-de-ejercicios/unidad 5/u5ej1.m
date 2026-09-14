@@ -84,7 +84,7 @@ Gb = 1
 
 % G de AO no inversor
 
-Gni = tf((1 + R1/R1),1) % ya que Gni = 1+R3/R4=2
+Gni = 1 + R1/R1 % ya que Gni = 1+R3/R4=2
                       % Gni = tf(2,1)
 
 % Cascada desde el 1er pasabajos hasta AO no inversor
@@ -95,6 +95,7 @@ G_casc = minreal(Gpb*Gb*Gpb*Gni)
 ## 1) ponemos a 0 la entrada (-)
 ##     - Nos queda un AO no inversor: ganancia = (1+ Rf/Rin ) multiplicado
 ##       por lo que haya llegado al (+) (en este caso el divisor resistivo)
+##     (1+ Rf/Rin) * R7/(R7+R8)
 
 ## 2) Ahora ponemos a 0 la entrada (+)
 ##    - Nos queda un AO inversor: ganancia = -Rf/Rin, aplicada a Vout
@@ -104,10 +105,10 @@ G_casc = minreal(Gpb*Gb*Gpb*Gni)
 
 % K1 = (divisor resistivo) * (ganancia AO no inversor)
 
-  K1 = R2/(R2+R1) * (1 + R2/R2)
+  K1 = (R2/(R2+R1)) * (1 + R2/R2)
 
 % Kr = K de realimentacion
-  Kr = R2/R2
+  Kr = -R2/R2
 
 
 %Cerramos el lazo:
