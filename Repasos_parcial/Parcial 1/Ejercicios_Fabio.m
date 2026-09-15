@@ -143,7 +143,7 @@ Gpb = 1/(1+R1_v*C1_v*s);
 K_b = 1;
 
 % G total:
-G2 = minreal(Gpb*G_b*Gpb)
+G2 = minreal(Gpb*K_b*Gpb)
 
 % Grafico ambos sistemas:
 step(G1_fdt); hold on;
