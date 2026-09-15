@@ -219,25 +219,359 @@ double(Sol)
 
 %-------------------------------------------------------------------------------
 
-%UNIDAD 5
+%UNIDAD 8
+
+%Ejercicio 1 sistemas de 1er y 2do orden
+%........................................
+
+clear all, close all, clc
+pkg load control
+pkg load symbolic
+
+%Defino valores y fdt
+
+s = tf('s')
+K = 0.75
+Tau = 1.5e-6/4
+
+G = K/((Tau/2)*s+1)^2
+step(G,4e-6)
+
+%Ejercicio 2 sistemas de 1er y 2do orden
+%........................................
+
+clear all, close all, clc
+pkg load control
+pkg load symbolic
+
+%Defino valores y fdt
+
+s = tf('s')
+K = 1.7
+Tau = 0.05
+
+G = K/((Tau/2)*s+1)^2
+
+step(G, 0.25)
+
+%Ejercicio 3 sistemas de 1er y 2do orden
+%........................................
+
+clear all, close all, clc
+pkg load control
+pkg load symbolic
+
+%Defino valores y fdt
+
+s = tf('s')
+K = 1.2
+Tau = 0.756
+
+G = K/((Tau/2)*s+1)^2
+
+step(G, 4.5)
 
 
+%Ejercicio 4 sistemas de 1er y 2do orden
+%........................................
+
+clear all, close all, clc
+pkg load control
+pkg load symbolic
+
+%Defino valores y fdt
+
+s = tf('s')
+
+K = 1 %------>  Representa el valor final
+Vmax = 1.1
+Mp = (Vmax-K)/K  %-----> Sobrepasamiento
+Tp = 3e-3  %------> Tiempo pico
+psita = (-log(Mp))/(sqrt(log(Mp)^2+pi^2))
+wn = pi/(Tp*sqrt(1-psita^2))
+
+%Calculo funcion de transferencia y simulo
+G = (K*wn^2)/(s^2+2*psita*wn*s+wn^2)
+step(G, 7e-3)
 
 
+%Ejercicio 5 sistemas de 1er y 2do orden
+%........................................
+
+clear all, close all, clc
+pkg load control
+pkg load symbolic
+
+%Defino valores y fdt
+s = tf('s')
+Vmax = 1.2
+K = 1
+Mp = (Vmax-K)/K
+Tp =1
+psita = (-log(Mp))/(sqrt(log(Mp)^2+pi^2))
+wn = pi/(Tp*sqrt(1-psita^2))
+
+%Calculo funcion de transferencia y simulo
+G = (K*wn^2)/(s^2+2*psita*wn*s+wn^2)
+
+step(G, 3.5)
+
+%Ejercicio sistemas de 1er y 2do orden ---> tarea
+%..................................................
+
+clear all, close all, clc
+pkg load control
+pkg load symbolic
+
+%Defino valores y fdt
+s = tf('s')
+K = 3.5
+Tau = 0.0025
+td = 0.004
+ts = 0.012 - td
 
 
+G = K/(1+Tau*s)
+
+step(G, 0.02)
+
+%-------------------------------------------------------------------------------
+
+%UNIDAD 5 ---> SINTESIS DE REDES ACTIVAS
+
+%Ejercicio 1 --> Guia de ejercicios
+
+close all, clear all, clc
+pkg load control
+pkg load symbolic
+
+%Declaro variables simbolicas
+syms R1 R2 real
+
+%El sistema es un amplificador no inversor:
+G = 1+(R2/R1)
+
+%Ejercicio 2 --> Guia de ejercicios
+clear all, close all, clc;
+pkg load control;
+pkg load symbolic;
+
+%Defino variables y fdt --> Pasa bajos, buffer, pasa bajos, buffer
+s = tf('s')
+R = 10e3
+C = 1e-9
+
+Gpb = 1/(R*C*s+1)
+
+%Ganancia de un buffer:
+K = 1
+
+%fdt total:
+G = minreal(Gpb*K*Gpb*K)
 
 
+%Ejercicio 3 --> Guia de ejercicios
+
+clear all, close all, clc;
+pkg load control;
+pkg load symbolic;
+
+%Defino variables y fdt --> Pb - Buffer - Pb - Ao no inversor
+
+s = tf('s')
+R = 10e3
+C = 1e-9
+
+Gpb = 1/(R*C*s+1)
+
+%Ganancia del buffer y del OpAmp
+K1 = 1 %--> Buffer
+K2  = 1+(R/R) %--> OpAmp
+
+%fdt total --> multiplico la cascada
+G = minreal(Gpb*K1*Gpb*K2)
 
 
+%Ejercicio 4 --> Guia de ejercicios
+%...................................
+clear all, close all, clc;
+pkg load control;
+pkg load symbolic;
+
+%Defino variables --> Diferencial - Pb - Buffer - Pb - C. No inversora
+
+s = tf('s')
+R1 = 1e3
+R2 = 10e3
+C = 1e-9
+
+Gpb = 1/(R2*C*s+1)
+
+%Ganancias del buffer y OpAmp (sin C.diferencial)
+K2 = 1
+K3 = 1+(R2/R2)
+
+G_la = minreal(Gpb*K2*Gpb*K3) %Funcion del lazo abierto
+
+%OpAmp diferencial:
+K1 = (1+R1/R1)*(R1/(R1+R2)) %--> K del OpAmp no inversor * Divisor resistivo
+Kr = -(R1/R1) %--> Ganancia de realimentacion
+
+%Cierro el lazo --> Resuelvo realimentacion
+G_lc = minreal(G_la/(1+G_la*1))
+
+G = minreal(K1*(G_lc))  %G_total
+
+%Ejercicio 1 Tarea
+%..................
+
+clear all, close all, clc
+pkg load control
+pkg load symbolic
+
+%Defino variables --> Diferencial - Buffer c/divisor - Integrador - Inversor - Sumador
+s = tf('s')
+R = 1e3
+C = 1e-6
+Z_eq = (R*(1/(s*C)))/(R+1/(s*C))
+
+%G1 --> Integrador
+K_I = -(Z_eq/R)
+G1 = minreal(K_I)
+
+%G3 --> Buffer + divisor
+K_B = 1
+Div_v = (R+(1/(s*C)))/(R+R+(1/(s*C)))
+G3 = minreal(K_B*Div_v)
+
+%K2 --> Inversor
+K_Inv = -(R/R)
+K2 = K_Inv
+
+%K3 --> Sumador
+K_S = -1
+
+%K1 --> Diferencial
+K_D = (R/(R+R))*(1+(R/R))
+
+%Resolucion final del sistema
+G_la = minreal((G1+K2*G3)*(K_S)) %--> lazo abiero
+
+G_lc = minreal(G_la/(1+G_la)) %--> lazo cerrado
+
+G = minreal(K_D*G_lc) %--> G final
+
+%-------------------------------------------------------------------------------
+
+%EJERCICIOS ANEXOS
 
 
+%Ejercicio 1
+%............
+clear all, close all, clc
+pkg load symbolic
+
+syms s
+
+G1 = 2/(s+3);
+G2 = 3/(s+3);
+G3 = 6/s;
+G4 = 7;
+G5 = 5/(s+2);
+G6 = 10;
+
+fdt = simplify((G1-G3)*(G4-G5)/(1-G1*G2) + G6)
+
+[num, den] = numden(fdt);
+
+num = collect(expand(num), s)
+den = collect(expand(den), s)
 
 
+%Ejercicio 2
+%............
+
+clear all, close all, clc
+pkg load control;
+pkg load symbolic;
+
+%Defino variables --> apartado a
+R1 = 5e3
+C1 = 1e-6
+s = tf('s')
+
+%Resuelvo mi G
+G1_a = minreal((1/(R1*C1*s+1))^2) %--> (Pb1)*(Pb2)
+G1_b = minreal((1/(R1*C1*s+1))^2)
+step(G1_a); hold on;
+step(G1_b)
+
+%Apartado b
+
+s = tf('s')
+R1_b = 5e3
+R2_b = 500e3
+C1_b = 1e-6
+C2_b = 10e-9
+K_buffer = 1
+
+Pb_1 = 1/(R1_b*C1_b*s+1);
+Pb_2 = 1/(R2_b*C2_b*s+1);
+
+G2_a = Pb_1*Pb_2
+G2_b = Pb_1*Pb_2*K_buffer
+
+step(G2_a);hold on;
+step(G2_b)
+
+%-------------------------------------------------------------------------------
+
+%Ejercicio 1 mallas y nodos
+%.........................
+clear all, close all, clc
+pkg load control
+pkg load symbolic
+
+syms s
+
+%Declaro las variables
+R1 = 10
+R2 = 100
+L1 = 1*s        % s --> mult laplaciano
+L2 = 100*s
+
+%Planteo ecuaciones
+B1 = R2 + L2 %----> Serie R1 y R2
+B2 = simplify((B1*L1)/(B1+L1)) % ---> Vout
+Vout = B2
+Vin = simplify(B2+R1)
+
+%Encuentro mi fdt
+fdt = simplify(Vout/Vin)
 
 
+%Ejercicio 2 mallas y nodos
+%...........................
+clear all, close all, clc;
+pkg load control;
+pkg load symbolic;
 
+syms s
 
+%Defino mis variables
+R1 = 100
+R2 = 100
+L1 = 1*s
+L2 = 10*s
+
+%Planteo ecuaciones
+B1 = simplify((L2*R2)/(L2+R2))  % --> Paralelo L2 y R2
+B2 = simplify(L1+B1)
+Vout = B2
+Vin = simplify(B2+R1)
+
+%Encuentro mi fdt
+fdt = simplify(Vout/Vin)
 
 
 
