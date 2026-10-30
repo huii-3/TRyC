@@ -1,1 +1,0 @@
-# Repaso del segundo parcial
